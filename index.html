@@ -3,100 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚖️ 模拟法庭训练智能体 · 在线体验</title>
+<title>法理方舟 · 模拟法庭训练智能体</title>
 <style>
   :root{
-    --navy:#1a2238; --navy-light:#2a3553; --gold:#c8a951; --gold-soft:#e0c97a;
-    --cream:#f5f1e8; --cream-dark:#ebe4d4; --ink:#23242a; --muted:#6b6f76; --line:#d8cfb8;
+    --bg:#0c0c11; --panel:#16161f; --panel2:#1d1d28; --line:#33333f;
+    --gold:#d4af37; --gold-soft:#e8c869; --gold-deep:#a87d28;
+    --ink:#ece6d6; --muted:#948e7e;
+    --gg:linear-gradient(135deg,#f6e6a8,#d4af37 48%,#bf953f 78%,#f9e9a0);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
-    background:var(--cream);color:var(--ink);min-height:100vh;
-    background-image:radial-gradient(circle at 20% 10%,rgba(200,169,81,.08),transparent 40%),
-                     radial-gradient(circle at 80% 90%,rgba(26,34,56,.06),transparent 40%);
-  }
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);
+    background:var(--bg);min-height:100vh;overflow-x:hidden;
+    background-image:radial-gradient(circle at 50% -5%,rgba(212,175,55,.16),transparent 45%),
+                     radial-gradient(circle at 12% 75%,rgba(212,175,55,.06),transparent 35%),
+                     radial-gradient(circle at 88% 30%,rgba(127,167,212,.05),transparent 35%);}
   h1,h2,h3,.serif{font-family:Georgia,"Songti SC","SimSun",serif}
-  .container{max-width:980px;margin:0 auto;padding:0 20px}
+  ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:#2c2c38;border-radius:5px}
+  .container{max-width:1000px;margin:0 auto;padding:0 22px}
+  .gold-text{background:var(--gg);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-  /* Hero */
-  .hero{text-align:center;padding:54px 20px 34px}
-  .hero .gavel{font-size:60px;margin-bottom:10px;filter:drop-shadow(0 4px 8px rgba(26,34,56,.2))}
-  .hero h1{font-size:38px;color:var(--navy);letter-spacing:2px;margin-bottom:12px}
-  .hero h1 .em{color:var(--gold);}
-  .hero .tagline{font-size:16px;color:var(--muted);max-width:600px;margin:0 auto 8px;line-height:1.7}
-  .hero .pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-  .pill{background:#fff;border:1px solid var(--line);color:var(--navy);font-size:13px;
-    padding:6px 14px;border-radius:20px;box-shadow:0 2px 6px rgba(26,34,56,.05)}
-  .pill b{color:var(--gold)}
+  /* HERO */
+  .hero{text-align:center;padding:64px 20px 34px;perspective:900px}
+  .logo3d{width:150px;height:150px;margin:0 auto 22px;animation:float 5s ease-in-out infinite;
+    filter:drop-shadow(0 18px 30px rgba(0,0,0,.6)) drop-shadow(0 0 26px rgba(212,175,55,.25))}
+  @keyframes float{0%,100%{transform:translateY(0) rotateZ(0)}50%{transform:translateY(-12px) rotateZ(.5deg)}}
+  .hero h1{font-size:52px;letter-spacing:8px;margin-bottom:14px;text-shadow:0 2px 24px rgba(212,175,55,.25)}
+  .hero .en{font-size:13px;letter-spacing:6px;color:var(--gold-deep);margin-bottom:18px;text-transform:uppercase}
+  .hero .tagline{font-size:16px;color:#c9c2b2;max-width:560px;margin:0 auto;line-height:1.85}
+  .hero .tagline b{color:var(--gold-soft)}
+  .pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+  .pill{background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--gold-soft);font-size:12.5px;
+    padding:7px 15px;border-radius:20px;backdrop-filter:blur(4px)}
+  .pill b{color:#fff;-webkit-text-fill-color:#fff}
 
-  /* 版本选择卡 */
-  .choose{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:30px 0 14px}
-  @media(max-width:680px){.choose{grid-template-columns:1fr}.hero h1{font-size:30px}}
-  .vcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 26px;
-    text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:.22s;
-    box-shadow:0 6px 22px rgba(26,34,56,.07);display:flex;flex-direction:column}
-  .vcard:hover{transform:translateY(-5px);box-shadow:0 14px 34px rgba(26,34,56,.16);border-color:var(--gold-soft)}
-  .vcard .ribbon{position:absolute;top:16px;right:-32px;background:var(--gold);color:var(--navy);
-    font-size:11px;font-weight:800;padding:4px 38px;transform:rotate(45deg);letter-spacing:1px}
-  .vcard .ico{font-size:38px;margin-bottom:12px}
-  .vcard h2{font-size:23px;color:var(--navy);margin-bottom:4px}
-  .vcard .meta{font-size:12.5px;color:var(--gold);font-weight:700;margin-bottom:12px;letter-spacing:.5px}
-  .vcard p{font-size:13.5px;color:var(--muted);line-height:1.7;flex:1;margin-bottom:16px}
-  .vcard ul{list-style:none;margin-bottom:18px}
-  .vcard li{font-size:13px;color:var(--ink);padding:3px 0 3px 22px;position:relative}
-  .vcard li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:800}
-  .vcard .go{display:inline-block;text-align:center;background:linear-gradient(135deg,var(--navy),var(--navy-light));
-    color:var(--gold-soft);font-weight:700;padding:12px;border-radius:10px;font-family:Georgia,serif;
-    letter-spacing:2px;transition:.2s}
-  .vcard:hover .go{box-shadow:0 6px 16px rgba(26,34,56,.3)}
-  .vcard.featured{border-color:var(--gold);background:linear-gradient(180deg,#fffdf5,#fff)}
+  /* 版本卡 */
+  .choose{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:42px 0 14px}
+  @media(max-width:680px){.choose{grid-template-columns:1fr}.hero h1{font-size:38px;letter-spacing:5px}}
+  .vcard{background:linear-gradient(180deg,#1c1c27,#141420);border:1px solid var(--line);border-radius:20px;
+    padding:30px 28px;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:.28s;
+    box-shadow:0 12px 34px rgba(0,0,0,.5);display:flex;flex-direction:column}
+  .vcard::before{content:"";position:absolute;inset:0;border-radius:20px;padding:1px;
+    background:linear-gradient(135deg,rgba(212,175,55,.5),transparent 40%,transparent 60%,rgba(212,175,55,.3));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+  .vcard:hover{transform:translateY(-7px) scale(1.012);box-shadow:0 22px 48px rgba(0,0,0,.6),0 0 30px rgba(212,175,55,.18)}
+  .vcard.featured{background:linear-gradient(180deg,#241f12,#16130b)}
+  .ribbon{position:absolute;top:18px;right:-30px;background:var(--gg);color:#161015;font-size:11px;font-weight:800;
+    padding:4px 36px;transform:rotate(45deg);letter-spacing:1px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .vcard .ico{font-size:40px;margin-bottom:12px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+  .vcard h2{font-size:24px;margin-bottom:4px;color:var(--gold-soft)}
+  .vcard .meta{font-size:12.5px;color:var(--gold-deep);font-weight:700;margin-bottom:13px;letter-spacing:.5px}
+  .vcard p{font-size:13.5px;color:#b6afa0;line-height:1.7;flex:1;margin-bottom:16px}
+  .vcard ul{list-style:none;margin-bottom:20px}
+  .vcard li{font-size:13px;color:#d4cebe;padding:4px 0 4px 22px;position:relative}
+  .vcard li::before{content:"✦";position:absolute;left:0;color:var(--gold)}
+  .vcard .go{display:block;text-align:center;background:var(--gg);color:#15110a;font-weight:700;padding:12px;
+    border-radius:11px;font-family:Georgia,serif;letter-spacing:2px;transition:.2s;box-shadow:0 4px 14px rgba(212,175,55,.3)}
+  .vcard.outline .go{background:transparent;border:1px solid var(--gold);color:var(--gold-soft);box-shadow:none}
+  .vcard:hover .go{transform:translateY(-1px)}
 
-  /* 功能区 */
-  .features{margin:40px 0 20px}
-  .features h3{text-align:center;color:var(--navy);font-size:24px;margin-bottom:6px}
-  .features .fsub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:26px}
-  .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-  .feat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;transition:.2s}
-  .feat:hover{border-color:var(--gold-soft);transform:translateY(-3px);box-shadow:0 8px 20px rgba(26,34,56,.08)}
-  .feat .fico{font-size:28px;margin-bottom:10px}
-  .feat h4{color:var(--navy);font-size:16px;margin-bottom:6px;font-family:Georgia,serif}
-  .feat p{font-size:13px;color:var(--muted);line-height:1.65}
+  .warn{background:rgba(212,175,55,.07);border:1px solid var(--gold-deep);border-radius:12px;padding:13px 18px;
+    font-size:12.5px;color:#d8cba0;max-width:680px;margin:0 auto;line-height:1.7}
+  .warn b{color:var(--gold-soft)}
 
-  /* 流程 */
-  .how{background:var(--navy);border-radius:18px;padding:32px 28px;margin:36px 0;color:var(--cream);
-    background-image:linear-gradient(135deg,var(--navy),var(--navy-light))}
-  .how h3{text-align:center;color:var(--gold-soft);font-size:22px;margin-bottom:24px}
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px}
+  /* 功能 */
+  .sec{margin:54px 0 10px}
+  .sec h3{text-align:center;font-size:27px;margin-bottom:6px}
+  .sec .fsub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:30px}
+  .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .feat{background:linear-gradient(180deg,#1a1a24,#141420);border:1px solid var(--line);border-radius:16px;padding:24px;transition:.25s}
+  .feat:hover{border-color:var(--gold-deep);transform:translateY(-4px);box-shadow:0 14px 30px rgba(0,0,0,.5)}
+  .feat .fico{font-size:30px;margin-bottom:12px}
+  .feat h4{color:var(--gold-soft);font-size:16px;margin-bottom:7px;font-family:Georgia,serif}
+  .feat p{font-size:13px;color:#a9a293;line-height:1.7}
+
+  .how{background:linear-gradient(135deg,#13131b,#1c1c27);border:1px solid var(--line);border-radius:20px;
+    padding:38px 30px;margin:54px 0;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+  .how h3{text-align:center;font-size:24px;margin-bottom:28px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px}
   .step{text-align:center}
-  .step .num{width:42px;height:42px;line-height:42px;border-radius:50%;background:var(--gold);
-    color:var(--navy);font-weight:800;font-size:18px;margin:0 auto 10px;font-family:Georgia,serif}
-  .step h4{color:var(--gold-soft);font-size:15px;margin-bottom:5px}
-  .step p{font-size:12.5px;color:#b8c0d0;line-height:1.6}
+  .step .num{width:48px;height:48px;line-height:48px;border-radius:50%;background:var(--gg);color:#161015;
+    font-weight:800;font-size:20px;margin:0 auto 12px;font-family:Georgia,serif;box-shadow:0 6px 16px rgba(212,175,55,.4)}
+  .step h4{color:var(--gold-soft);font-size:15px;margin-bottom:6px}
+  .step p{font-size:12.5px;color:var(--muted);line-height:1.65}
 
-  footer{text-align:center;padding:30px 20px 40px;color:var(--muted);font-size:12px;line-height:1.8}
+  footer{text-align:center;padding:36px 20px 46px;color:var(--muted);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:40px}
   footer a{color:var(--gold);text-decoration:none}
-  .warn{background:#fbf3e0;border:1px solid var(--gold-soft);border-radius:10px;padding:12px 16px;
-    font-size:12.5px;color:#7a5f1b;max-width:640px;margin:0 auto 4px;line-height:1.65}
+  .seal{width:46px;height:46px;margin:0 auto 12px;opacity:.85}
 </style>
 </head>
 <body>
-
 <div class="container">
 
   <div class="hero">
-    <div class="gavel">⚖️</div>
-    <h1>模拟法庭<span class="em">训练智能体</span></h1>
-    <div class="tagline">三位一体 AI 导师——<b>法官 · 对方律师 · 案件当事人</b><br>面向中国民事案件的沉浸式实战训练，培养法学生的专业技能、表达能力与临场应变。</div>
+    <svg class="logo3d" viewBox="0 0 100 100"><defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".35" stop-color="#e8c869"/><stop offset=".62" stop-color="#bf953f"/><stop offset=".85" stop-color="#a87d28"/><stop offset="1" stop-color="#f9e9a0"/></linearGradient>
+      <radialGradient id="g2" cx=".5" cy=".34" r=".75"><stop offset="0" stop-color="#33333f"/><stop offset=".7" stop-color="#16161d"/><stop offset="1" stop-color="#08080c"/></radialGradient>
+      <filter id="g3"><feDropShadow dx="0" dy="1.4" stdDeviation="1.2" flood-color="#000" flood-opacity=".55"/></filter>
+      <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8db"/><stop offset="1" stop-color="#caa23a"/></linearGradient></defs>
+      <circle cx="50" cy="50" r="47" fill="url(#g2)" stroke="url(#g1)" stroke-width="3"/>
+      <circle cx="50" cy="50" r="42" fill="none" stroke="url(#g1)" stroke-width="1" opacity=".4"/>
+      <g fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linecap="round" filter="url(#g3)">
+        <line x1="50" y1="23" x2="50" y2="41"/><line x1="29" y1="35" x2="71" y2="35"/>
+        <path d="M29 35 L23 47 M29 35 L35 47 M21 47 Q29 56 37 47"/>
+        <path d="M71 35 L65 47 M71 35 L77 47 M63 47 Q71 56 79 47"/></g>
+      <circle cx="50" cy="21" r="3.4" fill="url(#g4)"/>
+      <path d="M21 62 Q50 80 79 62 L72 71 Q50 84 28 71 Z" fill="url(#g4)" filter="url(#g3)"/>
+      <path d="M25 77 q6 4.5 12 0 t12 0 t12 0" fill="none" stroke="url(#g1)" stroke-width="1.7" opacity=".75"/>
+      <path d="M30 82 q5 3.5 10 0 t10 0" fill="none" stroke="url(#g1)" stroke-width="1.3" opacity=".5"/>
+    </svg>
+    <h1 class="gold-text">法理方舟</h1>
+    <div class="en">Ark of Jurisprudence · Moot Court AI</div>
+    <div class="tagline">三位一体 AI 导师——<b>法官 · 对方律师 · 案件当事人</b><br>载法理之舟，渡实战之海。面向中国民事案件的沉浸式模拟法庭训练。</div>
     <div class="pills">
       <span class="pill"><b>出题/咨询</b> 双模式</span>
       <span class="pill"><b>三级</b> 难度</span>
+      <span class="pill"><b>语音</b> 答辩</span>
       <span class="pill"><b>五维</b> 雷达评分</span>
-      <span class="pill"><b>经典案例</b> 引证</span>
+      <span class="pill"><b>文书</b> 批改</span>
+      <span class="pill"><b>成长</b> 档案</span>
     </div>
   </div>
 
-  <!-- 版本选择 -->
   <div class="choose">
     <a class="vcard featured" href="deepseek.html">
       <span class="ribbon">推荐</span>
@@ -104,63 +131,55 @@
       <h2>DeepSeek 版</h2>
       <div class="meta">国内直连 · 无需代理 · 成本低</div>
       <p>由 DeepSeek 大模型驱动，国内网络可直接访问，注册充值便捷（¥1 起）。适合大多数用户。</p>
-      <ul>
-        <li>deepseek-chat / deepseek-reasoner 可选</li>
-        <li>R1 模型可显示推理过程</li>
-        <li>响应快、价格亲民</li>
-      </ul>
+      <ul><li>deepseek-chat / reasoner 可选</li><li>R1 可显示推理过程</li><li>响应快、价格亲民</li></ul>
       <span class="go">进入 DeepSeek 版 →</span>
     </a>
-
-    <a class="vcard" href="claude.html">
+    <a class="vcard outline" href="claude.html">
       <div class="ico">🧠</div>
       <h2>Claude 版</h2>
       <div class="meta">Anthropic 出品 · 推理能力强</div>
-      <p>由 Claude（Opus 4.8 等）驱动，法律推理与长文分析能力出色。需 Anthropic 账户及额度，部分地区可能需代理。</p>
-      <ul>
-        <li>Opus 4.8 / Sonnet 4.6 / Haiku 4.5</li>
-        <li>复杂案件推理更强</li>
-        <li>需 console.anthropic.com 充值</li>
-      </ul>
+      <p>由 Claude（Opus 4.8 等）驱动，法律推理与长文分析能力出色。需 Anthropic 账户额度，部分地区可能需代理。</p>
+      <ul><li>Opus 4.8 / Sonnet 4.6 / Haiku 4.5</li><li>复杂案件推理更强</li><li>需 console.anthropic.com 额度</li></ul>
       <span class="go">进入 Claude 版 →</span>
     </a>
   </div>
 
-  <div class="warn">
-    🔑 <b>自带密钥（BYOK）模式</b>：两个版本都需你填入自己的 API Key，密钥仅保存在你本机浏览器、不上传任何服务器。每位用户用自己的 Key，使用成本由各自承担。
-  </div>
+  <div class="warn">🔑 <b>自带密钥（BYOK）模式</b>：两个版本都需填入你自己的 API Key，密钥仅保存在你本机浏览器、不上传任何服务器。每位用户用自己的 Key，使用成本各自承担。</div>
 
-  <!-- 核心功能 -->
-  <div class="features">
-    <h3>核心功能</h3>
+  <div class="sec">
+    <h3 class="gold-text">核心功能</h3>
     <div class="fsub">为法学训练量身打造的完整闭环</div>
     <div class="fgrid">
       <div class="feat"><div class="fico">🎭</div><h4>角色扮演庭审</h4><p>AI 切换法官、对方律师、当事人三重身份，第一人称发言并主动施压，还原真实对抗。</p></div>
-      <div class="feat"><div class="fico">⚖️</div><h4>实时合理性判断</h4><p>你每发表一次代理意见，立即获得"合理 / 部分合理 / 不合理"判断与详细理由。</p></div>
+      <div class="feat"><div class="fico">🎤</div><h4>语音模拟答辩</h4><p>语音陈述代理意见、AI 角色语音播报，贴近真实出庭的口头辩论体验。</p></div>
+      <div class="feat"><div class="fico">⚖️</div><h4>实时合理性判断</h4><p>每发表一次代理意见，立即获得"合理 / 部分合理 / 不合理"判断与详细理由。</p></div>
       <div class="feat"><div class="fico">📊</div><h4>五维表现评分</h4><p>训练结束自动生成法律知识、逻辑推理、语言表达、应变、庭审礼仪五维雷达图。</p></div>
-      <div class="feat"><div class="fico">📚</div><h4>经典案例引证</h4><p>一键检索相似指导性/典型案例，给出裁判要旨与借鉴价值，强化类案思维（需核实原文）。</p></div>
-      <div class="feat"><div class="fico">🧩</div><h4>三级难度调节</h4><p>基础 / 标准 / 困难，困难模式含证据缺失、时效抗辩、格式条款等极端情形。</p></div>
-      <div class="feat"><div class="fico">🏛️</div><h4>结构化案件分析</h4><p>诉讼请求→请求权基础→三段论→抗辩事由，严格按法律方法论输出完整分析。</p></div>
+      <div class="feat"><div class="fico">📚</div><h4>经典案例引证</h4><p>一键检索相似指导性/典型案例，给出裁判要旨与借鉴价值，强化类案思维。</p></div>
+      <div class="feat"><div class="fico">✍️</div><h4>法律文书批改</h4><p>起诉状/答辩状/代理词按要素逐项点评、百分制打分，补强写作硬技能。</p></div>
+      <div class="feat"><div class="fico">📈</div><h4>个人成长档案</h4><p>记录历次评分，能力维度总表、成长曲线、薄弱项识别与针对性优化建议。</p></div>
+      <div class="feat"><div class="fico">🏛️</div><h4>结构化案件分析</h4><p>诉讼请求→请求权基础→三段论→抗辩事由，严格按法律方法论输出。</p></div>
     </div>
   </div>
 
-  <!-- 使用流程 -->
   <div class="how">
-    <h3>三步开始训练</h3>
+    <h3 class="gold-text">三步登舟</h3>
     <div class="steps">
-      <div class="step"><div class="num">1</div><h4>选择版本</h4><p>点击上方 DeepSeek 版或 Claude 版进入应用</p></div>
+      <div class="step"><div class="num">1</div><h4>选择版本</h4><p>点击 DeepSeek 版或 Claude 版进入应用</p></div>
       <div class="step"><div class="num">2</div><h4>填入 API Key</h4><p>在设置中粘贴你的密钥（仅存本机）</p></div>
-      <div class="step"><div class="num">3</div><h4>选模式开庭</h4><p>选择模式/案件类型/难度，即刻开始</p></div>
+      <div class="step"><div class="num">3</div><h4>开庭训练</h4><p>选模式/类型/难度，即刻开始</p></div>
     </div>
   </div>
 
   <footer>
-    ⚖️ 本工具仅供法学教学与训练使用，所有案情、分析与案例引证均不构成正式法律意见。<br>
-    真实案件请咨询持证律师；引用案例前请核实裁判文书原文。<br>
-    <br>
+    <svg class="seal" viewBox="0 0 100 100"><defs><linearGradient id="s1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c869"/><stop offset="1" stop-color="#a87d28"/></linearGradient></defs>
+      <circle cx="50" cy="50" r="46" fill="none" stroke="url(#s1)" stroke-width="2"/>
+      <g fill="none" stroke="url(#s1)" stroke-width="2.2" stroke-linecap="round"><line x1="50" y1="26" x2="50" y2="42"/><line x1="32" y1="36" x2="68" y2="36"/><path d="M32 36 L27 46 M32 36 L37 46 M25 46 Q32 53 39 46"/><path d="M68 36 L63 46 M68 36 L73 46 M61 46 Q68 53 75 46"/></g>
+      <path d="M26 64 Q50 78 74 64 L69 71 Q50 81 31 71 Z" fill="url(#s1)"/></svg>
+    <b style="color:var(--gold-soft)">法理方舟</b> · 模拟法庭训练智能体<br>
+    本工具仅供法学教学与训练使用，所有案情、分析与案例引证均不构成正式法律意见。<br>
+    真实案件请咨询持证律师；引用案例前请核实裁判文书原文。<br><br>
     开源项目 · <a href="https://github.com/jas5231292/moot-court-agent" target="_blank">GitHub</a>
   </footer>
-
 </div>
 </body>
 </html>
