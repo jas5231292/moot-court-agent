@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚖️ 模拟法庭训练智能体 · DeepSeek 版</title>
+<title>⚖️ 模拟法庭训练智能体</title>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
   :root{
@@ -18,14 +18,15 @@
     background:var(--cream);color:var(--ink);display:flex;flex-direction:column;height:100vh;
   }
   h1,h2,h3,.serif{font-family:Georgia,"Songti SC","SimSun",serif}
+
+  /* ---------- 顶栏 ---------- */
   header{
     background:linear-gradient(135deg,var(--navy),var(--navy-light));
     color:var(--cream);padding:12px 20px;display:flex;align-items:center;gap:12px;
     border-bottom:3px solid var(--gold);box-shadow:0 2px 10px rgba(0,0,0,.15);z-index:10;
   }
   header .logo{font-size:24px}
-  header h1{font-size:18px;letter-spacing:1px;color:var(--gold-soft)}
-  header h1 small{font-size:11px;color:#7fa7d4;letter-spacing:0;margin-left:6px}
+  header h1{font-size:19px;letter-spacing:1px;color:var(--gold-soft)}
   header .status{margin-left:auto;font-size:12px;color:#b8c0d0;display:flex;gap:14px;flex-wrap:wrap}
   header .status b{color:var(--gold-soft)}
   header button{
@@ -33,10 +34,14 @@
     padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:.2s
   }
   header button:hover{background:var(--gold);color:var(--navy)}
+
+  /* ---------- 主区 ---------- */
   main{flex:1;display:flex;overflow:hidden}
   #chat{flex:1;display:flex;flex-direction:column;overflow:hidden}
   #messages{flex:1;overflow-y:auto;padding:24px 18px;scroll-behavior:smooth}
   .wrap{max-width:840px;margin:0 auto}
+
+  /* ---------- 欢迎/设置卡 ---------- */
   .setup{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;
     margin:0 auto 18px;max-width:840px;box-shadow:0 4px 18px rgba(26,34,56,.06)}
   .setup .gavel{text-align:center;font-size:40px;margin-bottom:6px}
@@ -60,6 +65,8 @@
     font-size:16px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:.2s;font-family:Georgia,serif}
   .startbtn:hover{box-shadow:0 6px 18px rgba(26,34,56,.3)}
   .startbtn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* ---------- 消息气泡 ---------- */
   .msg{display:flex;margin-bottom:18px;gap:10px}
   .msg .avatar{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;
     justify-content:center;font-size:18px;border:2px solid var(--line)}
@@ -85,9 +92,6 @@
   .bubble th{background:var(--navy);color:var(--gold-soft)}
   .bubble tr:nth-child(even){background:var(--cream)}
   .bubble code{background:var(--cream-dark);padding:1px 5px;border-radius:4px;font-size:13px}
-  .think{background:#f0f3f8;border-left:3px solid #7fa7d4;padding:7px 12px;margin:8px 0;
-    border-radius:0 6px 6px 0;font-size:12.5px;color:#5a6678;white-space:pre-wrap}
-  .think .lbl{font-weight:700;color:#3a5a82;font-size:11px;display:block;margin-bottom:3px}
   .role-tag{display:inline-block;background:var(--navy);color:var(--gold-soft);font-size:12px;
     padding:1px 9px;border-radius:5px;margin-bottom:6px;font-weight:700}
   .verdict{border-radius:8px;padding:9px 13px;margin:9px 0;font-size:13.5px;font-weight:600}
@@ -96,11 +100,15 @@
   .verdict.no{background:#fbecea;border-left:4px solid var(--danger);color:#963429}
   .cursor::after{content:"▋";color:var(--gold);animation:blink 1s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
+
+  /* ---------- 雷达图 ---------- */
   .radar-wrap{background:#fffdf5;border:1px solid var(--gold-soft);border-radius:12px;
     padding:16px;margin:12px 0;text-align:center}
   .radar-wrap h4{color:var(--navy);margin-bottom:8px}
   .radar-legend{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin-top:10px;font-size:12px}
   .radar-legend span b{color:var(--gold);font-size:14px}
+
+  /* ---------- 输入区 ---------- */
   footer{border-top:1px solid var(--line);background:#fff;padding:12px 16px}
   .inrow{max-width:840px;margin:0 auto;display:flex;gap:10px;align-items:flex-end}
   textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
@@ -114,6 +122,8 @@
   .toolbar button{background:var(--cream-dark);border:1px solid var(--line);color:var(--navy);
     font-size:12px;padding:5px 11px;border-radius:14px;cursor:pointer;transition:.2s}
   .toolbar button:hover{background:var(--gold);border-color:var(--gold)}
+
+  /* ---------- 弹窗(API Key) ---------- */
   .modal-bg{position:fixed;inset:0;background:rgba(26,34,56,.55);display:none;align-items:center;
     justify-content:center;z-index:50;backdrop-filter:blur(2px)}
   .modal-bg.show{display:flex}
@@ -138,7 +148,7 @@
 
 <header>
   <span class="logo">⚖️</span>
-  <h1>模拟法庭训练智能体<small>DeepSeek 版</small></h1>
+  <h1>模拟法庭训练智能体</h1>
   <div class="status" id="statusBar"></div>
   <button id="cfgBtn">⚙ 设置</button>
   <button id="resetBtn">↻ 新庭审</button>
@@ -158,25 +168,27 @@
         <textarea id="input" rows="1" placeholder="以律师身份输入你的代理意见 / 应对策略…（Enter 发送，Shift+Enter 换行）" disabled></textarea>
         <button class="sendbtn" id="sendBtn" disabled>发送</button>
       </div>
-      <div class="disclaimer">⚖️ 本工具仅供教学训练，所有分析不构成正式法律意见。真实案件请咨询持证律师。｜ 由 DeepSeek 驱动</div>
+      <div class="disclaimer">⚖️ 本工具仅供教学训练，所有分析不构成正式法律意见。真实案件请咨询持证律师。</div>
     </footer>
   </div>
 </main>
 
+<!-- API Key 弹窗 -->
 <div class="modal-bg" id="modal">
   <div class="modal">
-    <h3>⚙ 配置 DeepSeek API Key</h3>
-    <p>本应用在你的浏览器本地直接调用 DeepSeek API，<b>Key 仅保存在你本机</b>，不上传任何服务器。DeepSeek 为国内服务，无需代理。</p>
-    <label>DeepSeek API Key</label>
+    <h3>⚙ 配置 Claude API Key</h3>
+    <p>本应用在你的浏览器本地直接调用 Claude API，<b>Key 仅保存在你本机</b>（localStorage），不会上传到任何服务器。</p>
+    <label>Claude API Key</label>
     <div class="keyrow">
-      <input type="password" id="apiKey" placeholder="sk-...">
+      <input type="password" id="apiKey" placeholder="sk-ant-api03-...">
       <button id="toggleKey" title="显示/隐藏">👁</button>
     </div>
-    <div class="hint">没有 Key？前往 <a href="https://platform.deepseek.com/api_keys" target="_blank">platform.deepseek.com</a> 注册并创建（需先充值，最低 ¥1 起）。</div>
-    <label>模型</label>
+    <div class="hint">没有 Key？前往 <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a> 免费注册并创建。</div>
+    <label>模型（影响智能程度与成本）</label>
     <select id="model">
-      <option value="deepseek-chat">deepseek-chat（V3，快速，推荐）</option>
-      <option value="deepseek-reasoner">deepseek-reasoner（R1，深度推理，含思考过程）</option>
+      <option value="claude-opus-4-8">Claude Opus 4.8 — 最强（推荐，成本较高）</option>
+      <option value="claude-sonnet-4-6">Claude Sonnet 4.6 — 均衡</option>
+      <option value="claude-haiku-4-5">Claude Haiku 4.5 — 快速经济</option>
     </select>
     <div class="row">
       <button class="cancel" id="cfgCancel">取消</button>
@@ -186,6 +198,7 @@
 </div>
 
 <script>
+/* ============ 系统提示词（与 CLAUDE.md 一致的模拟法庭导师设定） ============ */
 const SYSTEM_PROMPT = `你是一个模拟法庭训练智能体，同时扮演三类角色（按训练需要切换）：案件当事人（原告/被告）、对方律师、法官。你还需对学生（律师角色）的法律意见进行合理性判断（合理/部分合理/不合理）并说明理由。核心使命：通过中国民事案件模拟训练，培养法学生的专业技能、表达能力和应对能力。
 
 【两种模式】
@@ -230,14 +243,17 @@ const SYSTEM_PROMPT = `你是一个模拟法庭训练智能体，同时扮演三
 
 所有输出务必结构清晰、便于学生阅读。`;
 
-const LS={key:'ds_apikey',model:'ds_model'};
-let cfg={key:localStorage.getItem(LS.key)||'',model:localStorage.getItem(LS.model)||'deepseek-chat'};
+/* ============ 状态 ============ */
+const LS={key:'mc_apikey',model:'mc_model'};
+let cfg={key:localStorage.getItem(LS.key)||'',model:localStorage.getItem(LS.model)||'claude-opus-4-8'};
 let setup={mode:null,type:null,diff:null};
-let history=[]; let started=false, streaming=false;
+let history=[]; // {role,content}
+let started=false, streaming=false;
 
 const $=s=>document.querySelector(s);
 const msgList=$('#msgList'), input=$('#input'), sendBtn=$('#sendBtn');
 
+/* ============ 设置弹窗 ============ */
 function openCfg(){$('#apiKey').value=cfg.key;$('#model').value=cfg.model;$('#modal').classList.add('show')}
 function closeCfg(){$('#modal').classList.remove('show')}
 $('#cfgBtn').onclick=openCfg;
@@ -249,8 +265,9 @@ $('#cfgSave').onclick=()=>{
   closeCfg();renderStatus();
 };
 
+/* ============ 状态栏 ============ */
 function renderStatus(){
-  const m={'deepseek-chat':'DeepSeek V3','deepseek-reasoner':'DeepSeek R1'}[cfg.model]||cfg.model;
+  const m={ 'claude-opus-4-8':'Opus 4.8','claude-sonnet-4-6':'Sonnet 4.6','claude-haiku-4-5':'Haiku 4.5'}[cfg.model]||cfg.model;
   let s=`模型：<b>${m}</b> · Key：<b>${cfg.key?'已配置':'未配置'}</b>`;
   if(started)s=`模式：<b>${setup.mode==='exam'?'出题':'咨询'}</b> · 类型：<b>${typeName(setup.type)}</b> · 难度：<b>${diffName(setup.diff)}</b> · `+s;
   $('#statusBar').innerHTML=s;
@@ -258,12 +275,14 @@ function renderStatus(){
 const typeName=t=>({contract:'合同纠纷',family:'婚姻家庭',tort:'侵犯类'}[t]||'—');
 const diffName=d=>({basic:'基础',standard:'标准',hard:'困难'}[d]||'—');
 
+/* ============ 渲染设置卡 ============ */
 function renderSetup(){
   msgList.innerHTML=`
   <div class="setup">
     <div class="gavel">⚖️</div>
     <h2>模拟法庭训练系统</h2>
-    <div class="sub">三位一体导师：法官 · 对方律师 · 案件当事人 ｜ 中国民事案件实战训练 ｜ DeepSeek 驱动</div>
+    <div class="sub">三位一体导师：法官 · 对方律师 · 案件当事人 ｜ 中国民事案件实战训练</div>
+
     <div class="group">
       <label><span class="n">1</span>选择训练模式</label>
       <div class="cards" data-g="mode">
@@ -271,6 +290,7 @@ function renderSetup(){
         <div class="card" data-v="consult"><div class="t">咨询模式</div><div class="d">你提出具体案件或法律疑问，我给出建议与系统分析</div></div>
       </div>
     </div>
+
     <div class="group">
       <label><span class="n">2</span>选择案件类型</label>
       <div class="cards" data-g="type">
@@ -279,6 +299,7 @@ function renderSetup(){
         <div class="card" data-v="tort"><div class="t">侵犯类</div><div class="d">名誉/隐私/健康、侵权、不当得利等</div></div>
       </div>
     </div>
+
     <div class="group">
       <label><span class="n">3</span>选择难度等级</label>
       <div class="cards" data-g="diff">
@@ -287,8 +308,10 @@ function renderSetup(){
         <div class="card" data-v="hard"><div class="t">困难</div><div class="d warn">⚠️ 极端情形，导师主动施压</div></div>
       </div>
     </div>
+
     <button class="startbtn" id="startBtn" disabled>开 庭</button>
   </div>`;
+
   msgList.querySelectorAll('.cards').forEach(g=>{
     g.querySelectorAll('.card').forEach(c=>{
       c.onclick=()=>{
@@ -302,17 +325,21 @@ function renderSetup(){
   $('#startBtn').onclick=startTrial;
 }
 
+/* ============ 开庭 ============ */
 function startTrial(){
   if(!cfg.key){openCfg();return;}
   started=true;history=[];msgList.innerHTML='';
   $('#toolbar').style.display='flex';input.disabled=false;sendBtn.disabled=false;
   renderStatus();input.focus();
+
   const kickoff = setup.mode==='exam'
     ? `请进入【出题模式】。案件类型：${typeName(setup.type)}，难度：${diffName(setup.diff)}。请先用状态头开场，设计一个完整案情并扮演相应角色（原告或被告/对方律师）陈述，最后要求我以学生律师身份提出代理意见或应对策略。`
     : `请进入【咨询模式】。案件类型：${typeName(setup.type)}，难度：${diffName(setup.diff)}。请先用状态头与简短问候开场，并引导我描述具体的案件或法律疑问。`;
-  sendToModel(kickoff,true);
+
+  sendToModel(kickoff,/*hidden=*/true);
 }
 
+/* ============ 消息渲染 ============ */
 function addUser(text){
   const d=document.createElement('div');d.className='msg user';
   d.innerHTML=`<div class="avatar">🧑‍⚖️</div><div class="bubble"></div>`;
@@ -325,15 +352,13 @@ function addBot(){
   msgList.appendChild(d);scrollDown();
   return d.querySelector('.bubble');
 }
-function renderMarkdown(el,raw,reasoning){
-  let html='';
-  if(reasoning&&reasoning.trim()){
-    html+=`<div class="think"><span class="lbl">💭 推理过程</span>${escapeHtml(reasoning)}</div>`;
-  }
-  html+=marked.parse(raw||'',{breaks:true});
+function renderMarkdown(el,raw){
+  let html=marked.parse(raw,{breaks:true});
   el.innerHTML=html;
-  styleVerdicts(el);highlightRoleTags(el);
+  styleVerdicts(el);
+  highlightRoleTags(el);
 }
+// 把"合理性判断"引用块染色
 function styleVerdicts(el){
   el.querySelectorAll('blockquote').forEach(bq=>{
     const t=bq.textContent;
@@ -345,6 +370,7 @@ function styleVerdicts(el){
     }
   });
 }
+// 把开头【角色】渲染成标签
 function highlightRoleTags(el){
   el.querySelectorAll('p,h2,h3').forEach(p=>{
     const m=p.innerHTML.match(/^【([^】]{2,8})】/);
@@ -353,7 +379,7 @@ function highlightRoleTags(el){
 }
 function scrollDown(){const m=$('#messages');m.scrollTop=m.scrollHeight}
 
-/* ============ 调用 DeepSeek API（OpenAI 兼容，流式） ============ */
+/* ============ 调用 Claude API（流式） ============ */
 async function sendToModel(userText,hidden=false){
   if(streaming)return;
   if(!cfg.key){openCfg();return;}
@@ -362,19 +388,22 @@ async function sendToModel(userText,hidden=false){
   const bubble=addBot();
   streaming=true;sendBtn.disabled=true;input.disabled=true;
 
-  let acc='', reason='';
+  let acc='';
   try{
-    const resp=await fetch('https://api.deepseek.com/chat/completions',{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{
         'content-type':'application/json',
-        'authorization':'Bearer '+cfg.key
+        'x-api-key':cfg.key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
         model:cfg.model,
         max_tokens:8000,
-        stream:true,
-        messages:[{role:'system',content:SYSTEM_PROMPT},...history]
+        system:SYSTEM_PROMPT,
+        messages:history,
+        stream:true
       })
     });
     if(!resp.ok){
@@ -394,39 +423,42 @@ async function sendToModel(userText,hidden=false){
         const data=line.slice(5).trim();
         if(data==='[DONE]'||!data)continue;
         let ev;try{ev=JSON.parse(data)}catch{continue}
-        const delta=ev.choices?.[0]?.delta;
-        if(!delta)continue;
-        if(delta.reasoning_content)reason+=delta.reasoning_content;
-        if(delta.content)acc+=delta.content;
-        renderMarkdown(bubble,acc,reason);bubble.classList.add('cursor');
-        scrollDown();
+        if(ev.type==='content_block_delta'&&ev.delta?.type==='text_delta'){
+          acc+=ev.delta.text;
+          renderMarkdown(bubble,acc);bubble.classList.add('cursor');
+          scrollDown();
+        }
       }
     }
     bubble.classList.remove('cursor');
-    renderMarkdown(bubble,acc,reason);
+    renderMarkdown(bubble,acc);
     history.push({role:'assistant',content:acc});
     maybeRenderRadar(bubble,acc);
   }catch(e){
     bubble.classList.remove('cursor');
     bubble.innerHTML=`<div class="verdict no"><b>⚠️ 调用失败</b><br>${escapeHtml(e.message)}<br><br>
-      常见原因：① Key 错误或余额不足 → 点右上角 ⚙设置 检查；② 账户未充值。</div>`;
-    history.pop();
+      常见原因：① Key 错误或额度不足 → 点右上角 ⚙设置 检查；② 网络/代理问题。</div>`;
+    history.pop(); // 回滚未成功的 user 轮，避免污染上下文
   }finally{
     streaming=false;sendBtn.disabled=false;input.disabled=false;input.focus();scrollDown();
   }
 }
 const escapeHtml=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
+/* ============ 五维评分雷达图（解析最终分析表格） ============ */
 const DIMS=['法律知识准确性','逻辑推理能力','语言表达能力','应变能力','庭审礼仪'];
 function maybeRenderRadar(bubble,text){
   if(!text.includes('综合评语')&&!text.includes('学生个人表现'))return;
   const scores=DIMS.map(d=>{
+    // 在表格行里找到该维度后面第一个 0-10 的数字
     const re=new RegExp(d.replace(/[/]/g,'.')+'[^|\\n]*?\\|\\s*(\\d{1,2})');
-    const m=text.match(re);return m?Math.min(10,parseInt(m[1])):null;
+    const m=text.match(re);
+    return m?Math.min(10,parseInt(m[1])):null;
   });
-  if(scores.filter(x=>x!==null).length<3)return;
+  if(scores.filter(x=>x!==null).length<3)return; // 解析不到足够分数则不画
   const vals=scores.map(x=>x===null?5:x);
-  const box=document.createElement('div');box.className='radar-wrap';
+  const box=document.createElement('div');
+  box.className='radar-wrap';
   box.innerHTML=`<h4>📊 五维表现雷达图</h4>${radarSVG(vals)}
     <div class="radar-legend">${DIMS.map((d,i)=>`<span>${d.replace('庭审礼仪','庭审礼仪/程序')} <b>${vals[i]}</b></span>`).join('')}</div>`;
   bubble.appendChild(box);scrollDown();
@@ -435,30 +467,43 @@ function radarSVG(vals){
   const N=vals.length,cx=150,cy=140,R=100,max=10;
   const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/N;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];};
   let grid='';
-  for(let g=1;g<=4;g++){const r=R*g/4;const pts=vals.map((_,i)=>pt(i,r).join(',')).join(' ');
-    grid+=`<polygon points="${pts}" fill="none" stroke="#d8cfb8" stroke-width="1"/>`;}
+  for(let g=1;g<=4;g++){
+    const r=R*g/4;
+    const pts=vals.map((_,i)=>pt(i,r).join(',')).join(' ');
+    grid+=`<polygon points="${pts}" fill="none" stroke="#d8cfb8" stroke-width="1"/>`;
+  }
   let axes='',labels='';
-  const names=['法律知识','逻辑推理','语言表达','应变能力','庭审礼仪'];
   vals.forEach((_,i)=>{
     const[x,y]=pt(i,R);
     axes+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#d8cfb8" stroke-width="1"/>`;
     const[lx,ly]=pt(i,R+22);
+    const names=['法律知识','逻辑推理','语言表达','应变能力','庭审礼仪'];
     labels+=`<text x="${lx}" y="${ly}" font-size="11" fill="#1a2238" text-anchor="middle" dominant-baseline="middle">${names[i]}</text>`;
   });
   const dataPts=vals.map((v,i)=>pt(i,R*v/max).join(',')).join(' ');
-  let dots='';vals.forEach((v,i)=>{const[x,y]=pt(i,R*v/max);dots+=`<circle cx="${x}" cy="${y}" r="3" fill="#c8a951"/>`;});
-  return `<svg width="300" height="290" viewBox="0 0 300 290">${grid}${axes}
-    <polygon points="${dataPts}" fill="rgba(200,169,81,.28)" stroke="#c8a951" stroke-width="2"/>${dots}${labels}</svg>`;
+  let dots='';
+  vals.forEach((v,i)=>{const[x,y]=pt(i,R*v/max);dots+=`<circle cx="${x}" cy="${y}" r="3" fill="#c8a951"/>`;});
+  return `<svg width="300" height="290" viewBox="0 0 300 290">
+    ${grid}${axes}
+    <polygon points="${dataPts}" fill="rgba(200,169,81,.28)" stroke="#c8a951" stroke-width="2"/>
+    ${dots}${labels}
+  </svg>`;
 }
 
+/* ============ 输入交互 ============ */
 function send(){
   const t=input.value.trim();if(!t||streaming)return;
-  input.value='';input.style.height='auto';sendToModel(t);
+  input.value='';input.style.height='auto';
+  sendToModel(t);
 }
 sendBtn.onclick=send;
-input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+input.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+});
 input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,140)+'px';});
-$('#toolbar').querySelectorAll('button').forEach(b=>{b.onclick=()=>{if(streaming)return;sendToModel(b.dataset.q);};});
+$('#toolbar').querySelectorAll('button').forEach(b=>{
+  b.onclick=()=>{if(streaming)return;sendToModel(b.dataset.q);};
+});
 $('#resetBtn').onclick=()=>{
   if(streaming)return;
   started=false;setup={mode:null,type:null,diff:null};history=[];
@@ -466,6 +511,7 @@ $('#resetBtn').onclick=()=>{
   renderSetup();renderStatus();
 };
 
+/* ============ 初始化 ============ */
 renderSetup();renderStatus();
 if(!cfg.key)setTimeout(openCfg,400);
 </script>
