@@ -6,86 +6,83 @@
 <title>法理方舟 · 模拟法庭训练智能体</title>
 <style>
   :root{
-    --bg:#172038; --panel:#22304f; --panel2:#2a3a5e; --line:#3e4d74;
-    --gold:#e0b94b; --gold-soft:#f2d488; --gold-deep:#b58a32;
-    --ink:#eef1f9; --muted:#9fabc7;
-    --gg:linear-gradient(135deg,#f8ecbe,#e0b94b 48%,#c79a3f 78%,#f9e9a0);
+    --bg:#faf7ef; --panel:#ffffff; --panel2:#f7f1e6; --line:#e6dcc6;
+    --gold:#c8a24a; --gold-soft:#9c7a26; --gold-deep:#8a6a1e;
+    --ink:#2e2b25; --muted:#8a8270;
+    --gg:linear-gradient(135deg,#e9cf86,#c8a24a 48%,#a8842c 78%,#edda9a);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);
     background:var(--bg);min-height:100vh;overflow-x:hidden;
-    background-image:radial-gradient(circle at 50% -8%,rgba(224,185,75,.18),transparent 46%),
-                     radial-gradient(circle at 12% 72%,rgba(224,185,75,.07),transparent 34%),
-                     radial-gradient(circle at 88% 26%,rgba(127,167,212,.10),transparent 36%);}
+    background-image:radial-gradient(circle at 50% -8%,rgba(200,162,74,.16),transparent 46%),
+                     radial-gradient(circle at 12% 72%,rgba(200,162,74,.08),transparent 34%),
+                     radial-gradient(circle at 88% 26%,rgba(155,182,214,.10),transparent 36%);}
   h1,h2,h3,.serif{font-family:Georgia,"Songti SC","SimSun",serif}
-  ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:#34436a;border-radius:5px}
+  ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:#dcd1b8;border-radius:5px}
   .container{max-width:1000px;margin:0 auto;padding:0 22px}
-  .gold-text{background:var(--gg);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .gold-text{background:linear-gradient(135deg,#b8902f,#d4af37 50%,#a8842c);-webkit-background-clip:text;background-clip:text;color:transparent}
 
   .hero{text-align:center;padding:60px 20px 30px;perspective:900px}
-  .logo3d{width:150px;height:150px;margin:0 auto 22px;animation:float 5.5s ease-in-out infinite;
-    filter:drop-shadow(0 16px 26px rgba(0,0,0,.5)) drop-shadow(0 0 22px rgba(224,185,75,.3))}
-  @keyframes float{0%,100%{transform:translateY(0) rotateZ(0)}50%{transform:translateY(-11px) rotateZ(.6deg)}}
-  .hero h1{font-size:54px;letter-spacing:9px;margin-bottom:14px;text-shadow:0 2px 26px rgba(224,185,75,.3)}
+  .logo3d{width:148px;height:148px;margin:0 auto 22px;animation:float 5.5s ease-in-out infinite;
+    filter:drop-shadow(0 12px 20px rgba(140,110,40,.28))}
+  @keyframes float{0%,100%{transform:translateY(0) rotateZ(0)}50%{transform:translateY(-10px) rotateZ(.5deg)}}
+  .hero h1{font-size:54px;letter-spacing:9px;margin-bottom:14px}
   .hero .en{font-size:13px;letter-spacing:6px;color:var(--gold-deep);margin-bottom:18px;text-transform:uppercase}
-  .hero .tagline{font-size:16px;color:#cdd5e6;max-width:560px;margin:0 auto;line-height:1.85}
+  .hero .tagline{font-size:16px;color:#5a5446;max-width:560px;margin:0 auto;line-height:1.85}
   .hero .tagline b{color:var(--gold-soft)}
   .pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
-  .pill{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--gold-soft);font-size:12.5px;
-    padding:7px 15px;border-radius:20px;backdrop-filter:blur(4px)}
-  .pill b{color:#fff;-webkit-text-fill-color:#fff}
+  .pill{background:#fff;border:1px solid var(--line);color:var(--gold-soft);font-size:12.5px;
+    padding:7px 15px;border-radius:20px;box-shadow:0 2px 6px rgba(140,110,40,.06)}
+  .pill b{color:#7a5e18}
 
   .choose{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:42px 0 14px}
   @media(max-width:680px){.choose{grid-template-columns:1fr}.hero h1{font-size:40px;letter-spacing:6px}}
-  .vcard{background:linear-gradient(180deg,#24314f,#1a2440);border:1px solid var(--line);border-radius:20px;
+  .vcard{background:#fff;border:1px solid var(--line);border-radius:20px;
     padding:30px 28px;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:.28s;
-    box-shadow:0 12px 32px rgba(0,0,0,.42);display:flex;flex-direction:column}
-  .vcard::before{content:"";position:absolute;inset:0;border-radius:20px;padding:1px;
-    background:linear-gradient(135deg,rgba(224,185,75,.6),transparent 42%,transparent 58%,rgba(224,185,75,.35));
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-  .vcard:hover{transform:translateY(-7px) scale(1.012);box-shadow:0 22px 46px rgba(0,0,0,.5),0 0 30px rgba(224,185,75,.2)}
-  .vcard.featured{background:linear-gradient(180deg,#2c3450,#1d2240)}
-  .ribbon{position:absolute;top:18px;right:-30px;background:var(--gg);color:#161015;font-size:11px;font-weight:800;
-    padding:4px 36px;transform:rotate(45deg);letter-spacing:1px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-  .vcard .ico{font-size:40px;margin-bottom:12px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+    box-shadow:0 10px 30px rgba(140,110,40,.10);display:flex;flex-direction:column}
+  .vcard:hover{transform:translateY(-7px) scale(1.012);box-shadow:0 20px 42px rgba(140,110,40,.18);border-color:var(--gold)}
+  .vcard.featured{background:linear-gradient(180deg,#fffdf7,#fcf6e8);border-color:var(--gold)}
+  .ribbon{position:absolute;top:18px;right:-30px;background:var(--gg);color:#3a2c10;font-size:11px;font-weight:800;
+    padding:4px 36px;transform:rotate(45deg);letter-spacing:1px;box-shadow:0 2px 8px rgba(140,110,40,.25)}
+  .vcard .ico{font-size:40px;margin-bottom:12px}
   .vcard h2{font-size:24px;margin-bottom:4px;color:var(--gold-soft)}
-  .vcard .meta{font-size:12.5px;color:var(--gold);font-weight:700;margin-bottom:13px;letter-spacing:.5px}
-  .vcard p{font-size:13.5px;color:#bcc5d8;line-height:1.7;flex:1;margin-bottom:16px}
+  .vcard .meta{font-size:12.5px;color:var(--gold-deep);font-weight:700;margin-bottom:13px;letter-spacing:.5px}
+  .vcard p{font-size:13.5px;color:#6a6354;line-height:1.7;flex:1;margin-bottom:16px}
   .vcard ul{list-style:none;margin-bottom:20px}
-  .vcard li{font-size:13px;color:#d6ddec;padding:4px 0 4px 22px;position:relative}
+  .vcard li{font-size:13px;color:#4a4536;padding:4px 0 4px 22px;position:relative}
   .vcard li::before{content:"✦";position:absolute;left:0;color:var(--gold)}
-  .vcard .go{display:block;text-align:center;background:var(--gg);color:#15110a;font-weight:700;padding:12px;
-    border-radius:11px;font-family:Georgia,serif;letter-spacing:2px;transition:.2s;box-shadow:0 4px 14px rgba(224,185,75,.3)}
-  .vcard.outline .go{background:transparent;border:1px solid var(--gold);color:var(--gold-soft);box-shadow:none}
+  .vcard .go{display:block;text-align:center;background:var(--gg);color:#3a2c10;font-weight:700;padding:12px;
+    border-radius:11px;font-family:Georgia,serif;letter-spacing:2px;transition:.2s;box-shadow:0 4px 12px rgba(200,162,74,.35)}
+  .vcard.outline .go{background:#fff;border:1px solid var(--gold);color:var(--gold-soft);box-shadow:none}
   .vcard:hover .go{transform:translateY(-1px)}
 
-  .warn{background:rgba(224,185,75,.08);border:1px solid var(--gold-deep);border-radius:12px;padding:13px 18px;
-    font-size:12.5px;color:#e3d6ac;max-width:680px;margin:0 auto;line-height:1.7}
+  .warn{background:#fdf6e3;border:1px solid var(--gold);border-radius:12px;padding:13px 18px;
+    font-size:12.5px;color:#6e5f3a;max-width:680px;margin:0 auto;line-height:1.7}
   .warn b{color:var(--gold-soft)}
 
   .sec{margin:54px 0 10px}
   .sec h3{text-align:center;font-size:27px;margin-bottom:6px}
   .sec .fsub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:30px}
   .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-  .feat{background:linear-gradient(180deg,#212e4b,#1a2440);border:1px solid var(--line);border-radius:16px;padding:24px;transition:.25s}
-  .feat:hover{border-color:var(--gold-deep);transform:translateY(-4px);box-shadow:0 14px 28px rgba(0,0,0,.42)}
+  .feat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;transition:.25s;box-shadow:0 4px 14px rgba(140,110,40,.05)}
+  .feat:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 26px rgba(140,110,40,.12)}
   .feat .fico{font-size:30px;margin-bottom:12px}
   .feat h4{color:var(--gold-soft);font-size:16px;margin-bottom:7px;font-family:Georgia,serif}
-  .feat p{font-size:13px;color:#b3bcd0;line-height:1.7}
+  .feat p{font-size:13px;color:#6a6354;line-height:1.7}
 
-  .how{background:linear-gradient(135deg,#1b2545,#26345a);border:1px solid var(--line);border-radius:20px;
-    padding:38px 30px;margin:54px 0;box-shadow:0 14px 36px rgba(0,0,0,.42)}
+  .how{background:linear-gradient(135deg,#fffdf7,#f7f0e1);border:1px solid var(--line);border-radius:20px;
+    padding:38px 30px;margin:54px 0;box-shadow:0 10px 30px rgba(140,110,40,.10)}
   .how h3{text-align:center;font-size:24px;margin-bottom:28px}
   .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px}
   .step{text-align:center}
-  .step .num{width:48px;height:48px;line-height:48px;border-radius:50%;background:var(--gg);color:#161015;
-    font-weight:800;font-size:20px;margin:0 auto 12px;font-family:Georgia,serif;box-shadow:0 6px 16px rgba(224,185,75,.4)}
+  .step .num{width:48px;height:48px;line-height:48px;border-radius:50%;background:var(--gg);color:#3a2c10;
+    font-weight:800;font-size:20px;margin:0 auto 12px;font-family:Georgia,serif;box-shadow:0 6px 14px rgba(200,162,74,.4)}
   .step h4{color:var(--gold-soft);font-size:15px;margin-bottom:6px}
   .step p{font-size:12.5px;color:var(--muted);line-height:1.65}
 
   footer{text-align:center;padding:36px 20px 46px;color:var(--muted);font-size:12px;line-height:1.9;border-top:1px solid var(--line);margin-top:40px}
-  footer a{color:var(--gold);text-decoration:none}
-  .seal{width:48px;height:48px;margin:0 auto 12px;opacity:.9}
+  footer a{color:var(--gold-soft);text-decoration:none}
+  .seal{width:50px;height:50px;margin:0 auto 12px}
 </style>
 </head>
 <body>
@@ -93,25 +90,17 @@
 
   <div class="hero">
     <svg class="logo3d" viewBox="0 0 100 100"><defs>
-      <linearGradient id="xg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".38" stop-color="#f0d27a"/><stop offset=".7" stop-color="#c79a3f"/><stop offset="1" stop-color="#f6e6a8"/></linearGradient>
-      <linearGradient id="xs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5dd96"/><stop offset="1" stop-color="#b88a34"/></linearGradient>
-      <filter id="xf"><feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-color="#0a1020" flood-opacity=".5"/></filter></defs>
-      <circle cx="50" cy="50" r="46.5" fill="none" stroke="url(#xg)" stroke-width="2.2"/>
-      <circle cx="50" cy="50" r="41.5" fill="none" stroke="url(#xg)" stroke-width="0.7" opacity=".35"/>
-      <path d="M50 21 Q79 37 50 53 Z" fill="url(#xs)" opacity=".2"/>
-      <line x1="50" y1="19" x2="50" y2="69" stroke="url(#xg)" stroke-width="2.3" stroke-linecap="round" filter="url(#xf)"/>
-      <circle cx="50" cy="18.5" r="2.6" fill="url(#xg)"/>
-      <path d="M34 33 Q50 29 66 33" fill="none" stroke="url(#xg)" stroke-width="2.4" stroke-linecap="round" filter="url(#xf)"/>
-      <path d="M37 32.6 L32 43 M37 32.6 L42 43 M30 43 Q37 49.5 44 43" fill="none" stroke="url(#xg)" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M63 32.6 L58 43 M63 32.6 L68 43 M56 43 Q63 49.5 70 43" fill="none" stroke="url(#xg)" stroke-width="1.7" stroke-linecap="round"/>
-      <path d="M25 66 Q50 81 81 63 Q74 75 63 78 L41 78 Q31 74 25 66 Z" fill="url(#xs)" filter="url(#xf)"/>
-      <path d="M79 63 q5 -1.5 8 -6" fill="none" stroke="url(#xg)" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
-      <path d="M23 82 q6 4 12 0 t12 0 t12 0 t12 0" fill="none" stroke="url(#xg)" stroke-width="1.6" opacity=".6"/>
-      <path d="M29 87 q5 3 10 0 t10 0 t10 0" fill="none" stroke="url(#xg)" stroke-width="1.2" opacity=".4"/>
+      <linearGradient id="xv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4d987"/><stop offset=".5" stop-color="#c8a24a"/><stop offset="1" stop-color="#a8842c"/></linearGradient>
+      <linearGradient id="xh" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9cf86"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#b8902f"/></linearGradient>
+      <filter id="xf"><feDropShadow dx="0" dy="1.6" stdDeviation="1.2" flood-color="#9c7a26" flood-opacity=".35"/></filter></defs>
+      <g filter="url(#xf)"><rect x="37" y="84.5" width="26" height="4.2" rx="1.6" fill="url(#xv)"/><rect x="43" y="80" width="14" height="5" rx="1.2" fill="url(#xv)"/><rect x="48" y="28" width="4" height="53" rx="2" fill="url(#xv)"/><circle cx="50" cy="24.5" r="3.6" fill="url(#xh)"/><rect x="17" y="28.3" width="66" height="3.6" rx="1.8" fill="url(#xh)"/><circle cx="18" cy="30.1" r="2.4" fill="url(#xv)"/><circle cx="82" cy="30.1" r="2.4" fill="url(#xv)"/></g>
+      <g fill="none" stroke="url(#xv)" stroke-width="1.3" stroke-linecap="round"><path d="M22 31 L15 45 M22 31 L29 45 M22 31 L22 45"/><path d="M78 31 L71 45 M78 31 L85 45 M78 31 L78 45"/></g>
+      <path d="M11 45 Q22 58 33 45 Z" fill="url(#xv)"/><path d="M67 45 Q78 58 89 45 Z" fill="url(#xv)"/>
+      <path d="M11 45 Q22 58 33 45" fill="none" stroke="url(#xh)" stroke-width="1" opacity=".55"/><path d="M67 45 Q78 58 89 45" fill="none" stroke="url(#xh)" stroke-width="1" opacity=".55"/>
     </svg>
     <h1 class="gold-text">法理方舟</h1>
     <div class="en">Ark of Jurisprudence · Moot Court AI</div>
-    <div class="tagline">三位一体 AI 导师——<b>法官 · 对方律师 · 案件当事人</b><br>载法理之舟，破实战之浪。面向中国民事案件的沉浸式模拟法庭训练。</div>
+    <div class="tagline">三位一体 AI 导师——<b>法官 · 对方律师 · 案件当事人</b><br>持公正之衡，明法理之辨。面向中国民事案件的沉浸式模拟法庭训练。</div>
     <div class="pills">
       <span class="pill"><b>出题/咨询</b> 双模式</span>
       <span class="pill"><b>三级</b> 难度</span>
@@ -160,7 +149,7 @@
   </div>
 
   <div class="how">
-    <h3 class="gold-text">三步登舟</h3>
+    <h3 class="gold-text">三步开庭</h3>
     <div class="steps">
       <div class="step"><div class="num">1</div><h4>选择版本</h4><p>点击 DeepSeek 版或 Claude 版进入应用</p></div>
       <div class="step"><div class="num">2</div><h4>填入 API Key</h4><p>在设置中粘贴你的密钥（仅存本机）</p></div>
@@ -169,14 +158,10 @@
   </div>
 
   <footer>
-    <svg class="seal" viewBox="0 0 100 100"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2d488"/><stop offset="1" stop-color="#b58a32"/></linearGradient></defs>
-      <circle cx="50" cy="50" r="46" fill="none" stroke="url(#fg)" stroke-width="2"/>
-      <line x1="50" y1="19" x2="50" y2="68" stroke="url(#fg)" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M34 33 Q50 29 66 33" fill="none" stroke="url(#fg)" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M37 33 L32 43 M37 33 L42 43 M30 43 Q37 49 44 43" fill="none" stroke="url(#fg)" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M63 33 L58 43 M63 33 L68 43 M56 43 Q63 49 70 43" fill="none" stroke="url(#fg)" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M25 66 Q50 81 81 63 Q74 75 63 78 L41 78 Q31 74 25 66 Z" fill="url(#fg)"/>
-      <path d="M24 83 q6 4 12 0 t12 0 t12 0 t12 0" fill="none" stroke="url(#fg)" stroke-width="1.4" opacity=".6"/></svg>
+    <svg class="seal" viewBox="0 0 100 100"><defs><linearGradient id="fv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4af37"/><stop offset="1" stop-color="#a8842c"/></linearGradient></defs>
+      <g fill="url(#fv)"><rect x="37" y="84.5" width="26" height="4.2" rx="1.6"/><rect x="43" y="80" width="14" height="5" rx="1.2"/><rect x="48" y="28" width="4" height="53" rx="2"/><circle cx="50" cy="24.5" r="3.6"/><rect x="17" y="28.3" width="66" height="3.6" rx="1.8"/><circle cx="18" cy="30.1" r="2.4"/><circle cx="82" cy="30.1" r="2.4"/></g>
+      <g fill="none" stroke="url(#fv)" stroke-width="1.3" stroke-linecap="round"><path d="M22 31 L15 45 M22 31 L29 45 M22 31 L22 45"/><path d="M78 31 L71 45 M78 31 L85 45 M78 31 L78 45"/></g>
+      <path d="M11 45 Q22 58 33 45 Z" fill="url(#fv)"/><path d="M67 45 Q78 58 89 45 Z" fill="url(#fv)"/></svg>
     <b style="color:var(--gold-soft)">法理方舟</b> · 模拟法庭训练智能体<br>
     本工具仅供法学教学与训练使用，所有案情、分析与案例引证均不构成正式法律意见。<br>
     真实案件请咨询持证律师；引用案例前请核实裁判文书原文。<br><br>
